@@ -31,7 +31,7 @@ export class UsersController {
     summary: '유저 생성',
     description: '유저 생성하기',
   })
-  @Post()
+  @Post('signup')
   async createUser(@Body() user: CreateUserDto): Promise<User> {
     return await this.userService.createUser(user);
   }

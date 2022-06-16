@@ -32,5 +32,5 @@ export class CreateUserDto {
     required: true,
   })
   @IsString()
-  readonly confirm_password: string;
+  readonly confirmPassword: string;
 }

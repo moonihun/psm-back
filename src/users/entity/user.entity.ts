@@ -2,12 +2,17 @@ import { Handicap } from 'src/scores/entity/handicap.entity';
 import { Score } from 'src/scores/entity/score.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum Group {
+  A = 'A',
+  B = 'B',
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -21,6 +26,9 @@ export class User {
 
   @Column({ default: false })
   isFemale: boolean;
+
+  @Column({ type: 'enum', enum: Group })
+  group: Group;
 
   @OneToMany(() => Score, (score) => score.user)
   scores: Score[];
