@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entity/user.entity';
+import { Repository } from 'typeorm';
 import { CreateHandicapDto } from './dto/create-handicap.dto';
 import { CreateScoreDto } from './dto/create-score.dto';
+import { ScoreView } from './entity/score.view.entity';
 import { Handicap } from './entity/handicap.entity';
 import { Score } from './entity/score.entity';
-import { HandicapsRepository } from './handicaps.repository';
 import { ScoresRepository } from './scores.repository';
 
 @Injectable()
@@ -15,47 +15,81 @@ export class ScoresService {
     private scoresRepository: ScoresRepository,
 
     @InjectRepository(Handicap)
-    private handicapsRepository: HandicapsRepository,
+    private handicapsRepository: Repository<Handicap>,
+
+    @InjectRepository(ScoreView)
+    private scoreViewRepository: Repository<ScoreView>,
   ) {}
 
   async findAll(): Promise<Score[]> {
-    return await this.scoresRepository.find({
-      relations: {
-        user: true,
-      },
-    });
+    return await this.scoresRepository.find();
   }
 
-  async findOne(id: number): Promise<Score> {
-    return await this.scoresRepository.findOne({
+  // async findOne(id: number): Promise<Score> {
+  //   return await this.scoresRepository.findOne({
+  //     where: {
+  //       id,
+  //     },
+  //     relations: {
+  //       user: true,
+  //     },
+  //   });
+  // }
+  async getScore() {
+    return await this.scoreViewRepository.find();
+  }
+
+  async getScoreByGroup(group: string) {
+    return await this.scoreViewRepository.find({
       where: {
-        id,
-      },
-      relations: {
-        user: true,
+        group,
       },
     });
   }
 
-  async createScore(score: CreateScoreDto, user: User): Promise<Score> {
-    const newScore = new Score();
-    newScore.date = score.date;
-    newScore.first_game = score.first_game;
-    newScore.second_game = score.second_game;
-    newScore.third_game = score.third_game;
-    newScore.round = score.round;
-    newScore.user = user;
+  async getScoreByMonth(month: string) {
+    return await this.scoreViewRepository.find({
+      where: {
+        month,
+      },
+    });
+  }
+
+  async getScoreByGroupAndMonth(group: string, month: string) {
+    return await this.scoreViewRepository.find({
+      where: {
+        group,
+        month,
+      },
+    });
+  }
+
+  async createScore(score: CreateScoreDto): Promise<Score> {
+    const { first_game, second_game, third_game, round_month, round, user } =
+      score;
+
+    const newScore = this.scoresRepository.create({
+      first_game,
+      second_game,
+      third_game,
+      round_month,
+      round,
+      user,
+    });
 
     return await this.scoresRepository.save(newScore);
   }
 
-  async createHandicap(
-    handicap: CreateHandicapDto,
-    user: User,
-  ): Promise<Handicap> {
-    const newHandicap = new Handicap();
-    newHandicap.handicap_score = handicap.handicap_score;
-    newHandicap.user = user;
+  async createHandicap(handicap: CreateHandicapDto): Promise<Handicap> {
+    const { handi_month, first_handi, second_handi, third_handi, user } =
+      handicap;
+    const newHandicap = this.handicapsRepository.create({
+      handi_month,
+      first_handi,
+      second_handi,
+      third_handi,
+      user,
+    });
 
     return await this.handicapsRepository.save(newHandicap);
   }

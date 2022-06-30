@@ -1,36 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+import { User } from '../entity/user.entity';
 
-export class CreateUserDto {
+export class CreateUserDto extends PickType(User, [
+  'username',
+  'password',
+] as const) {
   @ApiProperty({
-    example: 'test@test.com',
-    description: '유저 이메일',
-    required: true,
-  })
-  @IsEmail()
-  readonly email: string;
-
-  @ApiProperty({
-    example: 'honggildong',
-    description: '유저 이름',
-    required: true,
+    description: 'confirm password',
+    example: '1234',
   })
   @IsString()
-  readonly username: string;
-
-  @ApiProperty({
-    example: 'password12!@',
-    description: '유저 패스워드',
-    required: true,
-  })
-  @IsString()
-  readonly password: string;
-
-  @ApiProperty({
-    example: 'password12!@',
-    description: '유저 패스워드 확인',
-    required: true,
-  })
-  @IsString()
-  readonly confirmPassword: string;
+  confirmPassword: string;
 }

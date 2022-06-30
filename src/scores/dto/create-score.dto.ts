@@ -1,21 +1,11 @@
-import { IsDate, IsNumber } from 'class-validator';
+import { PickType } from '@nestjs/swagger';
+import { Score } from '../entity/score.entity';
 
-export class CreateScoreDto {
-  @IsNumber()
-  readonly round: number;
-
-  @IsDate()
-  readonly date: Date;
-
-  @IsNumber()
-  readonly first_game: number;
-
-  @IsNumber()
-  readonly second_game: number;
-
-  @IsNumber()
-  readonly third_game: number;
-
-  @IsNumber()
-  readonly userId: number;
-}
+export class CreateScoreDto extends PickType(Score, [
+  'round_month',
+  'round',
+  'first_game',
+  'second_game',
+  'third_game',
+  'user',
+] as const) {}

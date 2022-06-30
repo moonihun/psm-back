@@ -13,25 +13,56 @@ export class ScoresController {
     private usersService: UsersService,
   ) {}
 
+  // @Get(':id')
+  // findOne(@Param('id') id: number): Promise<Score> {
+  //   return this.scoresService.findOne(id);
+  // }
+
   @Get()
-  findAll(): Promise<Score[]> {
-    return this.scoresService.findAll();
+  getScore() {
+    return this.scoresService.getScore();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<Score> {
-    return this.scoresService.findOne(id);
+  @Get('group/:group')
+  getScoreByGroup(@Param('group') group: string) {
+    return this.scoresService.getScoreByGroup(group);
   }
+
+  @Get('month/:month')
+  getScoreByMonth(@Param('month') month: string) {
+    return this.scoresService.getScoreByMonth(month);
+  }
+
+  @Get(':group/:month')
+  getScoreByGroupAndMonth(
+    @Param('group') group: string,
+    @Param('month') month: string,
+  ) {
+    return this.scoresService.getScoreByGroupAndMonth(group, month);
+  }
+
+  // @Get('agroup/:month')
+  // getAgroupScoreByMonth(@Param('month') month: string) {
+  //   return this.scoresService.getScoreByMonth(month);
+  // }
+
+  // @Get('bgroup')
+  // getBgroupScore() {
+  //   return this.scoresService.getBgroupScore();
+  // }
+
+  // @Get('bgroup/:month')
+  // getBgroupScoreByMonth(@Param('month') month: string) {
+  //   return this.scoresService.getBgroupScoreByMonth(month);
+  // }
 
   @Post()
   async createScore(@Body() score: CreateScoreDto): Promise<Score> {
-    const user = await this.usersService.findOne(score.userId);
-    return this.scoresService.createScore(score, user);
+    return this.scoresService.createScore(score);
   }
 
   @Post('/handicap')
   async createHandicap(@Body() handicap: CreateHandicapDto): Promise<Handicap> {
-    const user = await this.usersService.findOne(handicap.userId);
-    return this.scoresService.createHandicap(handicap, user);
+    return this.scoresService.createHandicap(handicap);
   }
 }

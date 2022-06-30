@@ -1,12 +1,10 @@
-import { IsDate, IsNumber } from 'class-validator';
+import { PickType } from '@nestjs/swagger';
+import { Handicap } from '../entity/handicap.entity';
 
-export class CreateHandicapDto {
-  @IsNumber()
-  readonly handicap_score: number;
-
-  @IsDate()
-  readonly isActive: boolean;
-
-  @IsNumber()
-  readonly userId: number;
-}
+export class CreateHandicapDto extends PickType(Handicap, [
+  'handi_month',
+  'first_handi',
+  'second_handi',
+  'third_handi',
+  'user',
+] as const) {}

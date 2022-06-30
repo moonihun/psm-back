@@ -11,8 +11,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('handicaps')
-export class Handicap {
+export enum GroupEnum {
+  A = 'A',
+  B = 'B',
+}
+
+@Entity('groups')
+export class Group {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,28 +30,21 @@ export class Handicap {
   @IsNotEmpty()
   @Column()
   @Index()
-  handi_month: string;
+  group_month: string;
 
   @ApiProperty({
-    description: '첫 번째 핸디캡',
-    default: 0,
+    example: 'A or B',
+    description: '그룹',
   })
-  @Column({ default: 0 })
-  first_handi: number;
+  @Column({ type: 'enum', enum: GroupEnum, default: GroupEnum.A })
+  group: GroupEnum;
 
   @ApiProperty({
-    description: '두 번째 핸디캡',
-    default: 0,
+    example: 166,
+    description: '당월 에버리지',
   })
   @Column({ default: 0 })
-  second_handi: number;
-
-  @ApiProperty({
-    description: '세 번째 핸디캡',
-    default: 0,
-  })
-  @Column({ default: 0 })
-  third_handi: number;
+  average: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -59,6 +57,6 @@ export class Handicap {
     description: '대상자',
     required: true,
   })
-  @ManyToOne(() => User, (user) => user.handicaps)
+  @ManyToOne(() => User, (user) => user.groups)
   user: User;
 }

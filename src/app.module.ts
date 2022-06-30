@@ -7,6 +7,7 @@ import { PostgresConfigModule } from './config/database/config.module';
 import { PostgresConfigService } from './config/database/config.service';
 import { UsersModule } from './users/users.module';
 import { ScoresModule } from './scores/scores.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ScoresModule } from './scores/scores.module';
     }),
     UsersModule,
     ScoresModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PostgresConfigService],
