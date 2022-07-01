@@ -18,9 +18,12 @@ export class UsersService {
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersRepository.find({
-      relations: { scores: true, handicaps: true },
-    });
+    const qb = this.usersRepository
+      .createQueryBuilder()
+      .select(['users.id', 'users.username'])
+      .from(User, 'users');
+
+    return qb.getMany();
   }
 
   findOne(id: number): Promise<User> {

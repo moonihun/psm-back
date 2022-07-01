@@ -61,6 +61,11 @@ export class ScoresController {
     return this.scoresService.createScore(score);
   }
 
+  @Post('/add')
+  async scoretest(@Body() body: any) {
+    return this.scoresService.scoretest(body);
+  }
+
   @Post('/handicap')
   async createHandicap(@Body() handicap: CreateHandicapDto): Promise<Handicap> {
     return this.scoresService.createHandicap(handicap);

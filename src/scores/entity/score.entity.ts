@@ -83,4 +83,7 @@ export class Score {
   })
   @ManyToOne(() => User, (user) => user.scores)
   user: User;
+
+  @Column()
+  userId: number;
 }
